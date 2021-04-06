@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "target": "esnext",
+    "module": "commonjs"
+  },
+  "include": ["*.ts"],
+  "exclude": ["node_modules"]
+}
