@@ -3,8 +3,11 @@ import { Config, Data, TableRow } from "./types";
 import axios from "axios";
 import cheerio from "cheerio";
 import fs from "fs";
+import notifier from "node-notifier";
+import open from "open";
 // @ts-ignore
 import parsePrice from "parse-price";
+import path from "path";
 import prettier from "prettier";
 
 const DATA = "./data.json";
@@ -126,6 +129,31 @@ export const printData = (data: Data) => {
 
   if (!table.length) console.log("No data");
   else console.table(table);
+
+  notify(data, table);
+};
+
+/**
+ * If the price has changed show a push notification
+ *
+ * @param data data object
+ * @param table table object
+ */
+const notify = (data: Data, table: TableRow[]) => {
+  for (let row of table)
+    if (row.change !== "-") {
+      notifier.notify(
+        {
+          title: "Price change spotted!",
+          message: row.change + " change in " + row.name + "'s price.",
+          wait: true,
+          timeout: 60 * 60 * 2,
+        },
+        () => {
+          open(data[row.name].url);
+        }
+      );
+    }
 };
 
 /**
